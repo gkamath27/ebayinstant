@@ -1,4 +1,5 @@
 import time
+import xoneor
 
 from google.cloud import pubsub_v1
 
@@ -14,6 +15,7 @@ subscription_path = subscriber.subscription_path(
 def callback(message):
         print('Received message: {}'.format(message))
         message.ack()
+        makeCreateServiceCall()
 
 subscriber.subscribe(subscription_path, callback=callback)
 

@@ -16,13 +16,12 @@ def callback(message_future):
     else:
         print(message_future.result())
 
-for n in range(1, 10):
-    data = u'Message number {}'.format(n)
-    # Data must be a bytestring
-    data = data.encode('utf-8')
-    # When you publish a message, the client returns a Future.
-    message_future = publisher.publish(topic_path, data=data)
-    message_future.add_done_callback(callback)
+data = 'purchase'
+# Data must be a bytestring
+data = data.encode('utf-8')
+# When you publish a message, the client returns a Future.
+message_future = publisher.publish(topic_path, data=data)
+message_future.add_done_callback(callback)
 
 print('Published message IDs:')
 

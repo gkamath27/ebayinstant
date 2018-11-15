@@ -1,4 +1,5 @@
 import time
+#
 import xoneor
 
 from google.cloud import pubsub_v1
@@ -13,11 +14,13 @@ subscription_path = subscriber.subscription_path(
             'ebay-instant', 'trial')
 
 def callback(message):
-        print('Received message: {}'.format(message))
-        message.ack()
-        makeCreateServiceCall()
 
+        message.ack()
+        print("----------purchase indication received from the button----------")
+        xoneor.makeCreateServiceCall()
+        
 subscriber.subscribe(subscription_path, callback=callback)
+
 
             # The subscriber is non-blocking. We must keep the main thread from
             # exiting to allow it to process messages asynchronously in the background.

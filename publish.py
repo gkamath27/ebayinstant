@@ -1,4 +1,5 @@
 import time
+import RPi.GPIO as GPIO
 
 from google.cloud import pubsub_v1
 
@@ -16,16 +17,20 @@ def callback(message_future):
     else:
         print(message_future.result())
 
-data = 'purchase'
-# Data must be a bytestring
-data = data.encode('utf-8')
-# When you publish a message, the client returns a Future.
-message_future = publisher.publish(topic_path, data=data)
-message_future.add_done_callback(callback)
+GPIO.setmode(GPIO.BCM)
 
-print('Published message IDs:')
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# We must keep the main thread from exiting to allow it to process
-# messages in the background.
 while True:
-    time.sleep(60)
+    input_state = GPIO.input(18)
+    if input_state == False:
+        print("Button Pressed")
+        time.sleep(0.2)
+        data = 'purchase'
+        # Data must be a bytestring
+        data = data.encode('utf-8')
+        # When you publish a message, the client returns a Future.
+        message_future = publisher.publish(topic_path, data=data)
+        message_future.add_done_callback(callback)
+        print('Published message IDs:')
+
